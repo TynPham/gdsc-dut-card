@@ -1,0 +1,38 @@
+.wrapper {
+  background-image: url(/src/assets/images/bg-trim.svg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: left;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2rem;
+}
+.logo {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+}
+
+.logo img {
+  height: 50px;
+}
+
+.bg_icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+.bg_icon img {
+  width: 32%;
+}
+
+@media screen and (max-width: 1080px) {
+  .bg_icon {
+    display: none;
+  }
+}
