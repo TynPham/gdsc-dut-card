@@ -16,7 +16,7 @@ import slider from 'src/assets/images/slider.png'
 import map from 'src/assets/images/map.png'
 import signature from 'src/assets/images/signature.png'
 import QR_card from 'src/assets/images/QR-card.png'
-import cardBg from 'src/assets/images/cardbg.png'
+import cardBg from 'src/assets/images/cardbg.jpg'
 import cup from 'src/assets/images/cup.png'
 
 export {

@@ -16,6 +16,7 @@ import styles from './generateCard.module.css'
 import { path } from 'src/constants/path'
 import { isIOS, toPascalCase } from 'src/utils/utils'
 import Loading from 'src/components/loading/Loading'
+import FontFaceObserver from 'fontfaceobserver'
 
 export interface GenerateCardProps {}
 
@@ -43,9 +44,12 @@ export default function GenerateCard() {
     if (!ctx) {
       return
     }
-    const img = document.createElement('img')
-    img.onload = () => {
+    setIsLoading(true)
+    const img = new Image()
+    img.onload = async () => {
       ctx.drawImage(img, 0, 0, 1080, 1920)
+      const font = new FontFaceObserver('Google Sans', { weight: 600 })
+      await font.load()
       if (isIOS()) {
         ctx.font = '500 65px Google Sans'
         ctx.lineWidth = 3
@@ -55,11 +59,12 @@ export default function GenerateCard() {
       }
       ctx.textAlign = 'left'
       ctx.fillText(name, 120, 610)
+      setIsLoading(false)
     }
     img.src = cardBg
   }
 
-  const handleSaveImg = (): void => {
+  const handleSaveImg = async (): Promise<void> => {
     setIsLoading(true)
     const link = document.createElement('a')
     link.download = `${name}.jpg`
@@ -67,12 +72,58 @@ export default function GenerateCard() {
     if (!canvas) {
       return
     }
-    setTimeout(() => {
-      setIsLoading(false)
-      link.href = canvas.toDataURL('image/jpeg')
+
+    const blob = await new Promise<Blob | null>((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob)
+      }, 'image/jpeg')
+    })
+    if (blob) {
+      link.href = URL.createObjectURL(blob)
       link.click()
-    }, 1000)
+    }
+    setIsLoading(false)
   }
+
+  // const handleDrawImg = (): void => {
+  //   const canvas = canvasRef.current
+  //   if (!canvas) {
+  //     return
+  //   }
+  //   const ctx = canvas.getContext('2d')
+  //   if (!ctx) {
+  //     return
+  //   }
+  //   const img = document.createElement('img')
+  //   img.onload = () => {
+  //     ctx.drawImage(img, 0, 0, 1080, 1920)
+  //     if (isIOS()) {
+  //       ctx.font = '500 65px Google Sans'
+  //       ctx.lineWidth = 3
+  //       ctx.strokeText(name, 120, 610)
+  //     } else {
+  //       ctx.font = '600 65px Google Sans'
+  //     }
+  //     ctx.textAlign = 'left'
+  //     ctx.fillText(name, 120, 610)
+  //   }
+  //   img.src = cardBg
+  // }
+
+  // const handleSaveImg = (): void => {
+  //   setIsLoading(true)
+  //   const link = document.createElement('a')
+  //   link.download = `${name}.jpg`
+  //   const canvas = canvasRef.current
+  //   if (!canvas) {
+  //     return
+  //   }
+  //   setTimeout(() => {
+  //     setIsLoading(false)
+  //     link.href = canvas.toDataURL('image/jpeg')
+  //     link.click()
+  //   }, 1000)
+  // }
 
   // const htmlToImageConvert = () => {
   //   if (cardRef.current === null) return
