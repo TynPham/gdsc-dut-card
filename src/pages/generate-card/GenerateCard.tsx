@@ -23,7 +23,7 @@ export interface GenerateCardProps {}
 export default function GenerateCard() {
   const canvasRef = React.useRef<HTMLCanvasElement | null>(null)
   const cardRef = React.useRef<HTMLDivElement | null>(null)
-  const [isLoading, setIsLoading] = React.useState<boolean>(false)
+  const [isLoading, setIsLoading] = React.useState<boolean>(true)
   const navigate = useNavigate()
   const location = useLocation()
   const name = toPascalCase(location.state?.name)
@@ -44,7 +44,6 @@ export default function GenerateCard() {
     if (!ctx) {
       return
     }
-    setIsLoading(true)
     const img = new Image()
     img.onload = async () => {
       ctx.drawImage(img, 0, 0, 1080, 1920)
